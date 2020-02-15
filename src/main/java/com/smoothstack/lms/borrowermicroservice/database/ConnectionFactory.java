@@ -8,17 +8,14 @@ import org.springframework.context.annotation.Scope;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 @Configuration
 public class ConnectionFactory {
 
-    private static Properties defaultProperties = null;
-
-    @Value("${spring.datasource.driver-class-name:com.mysql.cj.jdbc.Driver}")
+    @Value("${spring.datasource.driver-class-name:org.h2.Driver}")
     private String driver;
 
-    @Value("${spring.datasource.url:jdbc:mysql://localhost:3306/library?useSSL=false}")
+    @Value("${spring.datasource.url:jdbc:h2:file:./data/database}")
     private String url;
 
     @Value("${spring.datasource.username:root}")
