@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.smoothstack.lms</groupId>
     <artifactId>lms-orchestrator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-RELEASE</version>
     <name>lms-orchestrator</name>
     <description>Lms Orchestrator</description>
 
