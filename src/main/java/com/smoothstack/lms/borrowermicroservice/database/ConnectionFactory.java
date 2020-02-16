@@ -1,5 +1,6 @@
 package com.smoothstack.lms.borrowermicroservice.database;
 
+import com.smoothstack.lms.borrowermicroservice.Debug;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +26,54 @@ public class ConnectionFactory {
     private String password;
 
     @Bean
+    @Scope("singleton")
+    public ConnectionFactory getConnectionFactory() {
+        return new ConnectionFactory();
+    }
+
+    @Bean
     @Scope("prototype")
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
-        Class.forName(driver);
+    public Connection getConnection() throws SQLException {
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            Debug.printException(e);
+        }
         Connection connection = DriverManager.getConnection(url, username, password);
         connection.setAutoCommit(Boolean.FALSE);
         return connection;
+    }
+
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
