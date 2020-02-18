@@ -2,6 +2,7 @@ package com.smoothstack.lms.borrowermicroservice.database.sql;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
@@ -113,5 +114,15 @@ public class SQLDataMap extends LinkedHashMap<String, Object> {
         return getKeyIndex(key, 1);
     }
 
+    public static  <R> R onDuplicatedKeyDrop(R v1, R v2) {
+        return v1;
+    }
 
+    public static  <R> R onDuplicatedKeyReplace(R v1, R v2) {
+        return v2;
+    }
+
+    public static  <R> R onDuplicatedKeyThrow(R v1, R v2) {
+        throw new IllegalArgumentException("Duplicated key detected.");
+    }
 }

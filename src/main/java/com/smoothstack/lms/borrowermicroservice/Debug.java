@@ -30,8 +30,25 @@ public class Debug {
         StackTraceElement[] ste =  new Throwable().getStackTrace();
 
         if (i < ste.length)
-            printf("In Method %s.%s:\n",
-                ste[i].getClassName(), ste[i].getMethodName());
+            printf("Method %s ... (%s:%s) in %s.class \n",
+                    ste[i].getMethodName(),
+                    ste[i].getFileName(), ste[i].getLineNumber(),
+                ste[i].getClassName().replace("com.smoothstack.lms.borrowermicroservice.","$.")
+                    );
+    }
+
+    public static void printStackTrace() {
+
+        if (!isDebug()) return;
+        printMethodInfo(2);
+        StackTraceElement[] ste =  new Throwable().getStackTrace();
+
+        for (int i = 1; i < ste.length; i++)
+            printf(" ... (%s:%d) -> '%s::%s' line %d\n",
+                    ste[i].getFileName(), ste[i].getLineNumber(),
+                    ste[i].getClassName()
+                        .replace("com.smoothstack.lms.borrowermicroservice.","$."),
+                    ste[i].getMethodName(), ste[i].getLineNumber()  );
     }
 
     public static void printException(Exception e) {

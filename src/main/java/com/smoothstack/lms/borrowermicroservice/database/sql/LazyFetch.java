@@ -9,66 +9,80 @@ import java.util.function.Function;
 public class LazyFetch<T> {
 
     private T object = null;
-    private Integer reference = 0;
-    private Function<Integer, T> fetchFunction;
+    private IntegerList reference = IntegerList.emptyList();
+    private Function<IntegerList, T> fetchFunction;
 
-    public LazyFetch(Integer reference, Function<Integer, T> fetchFunction) {
+    public LazyFetch(IntegerList reference, Function<IntegerList, T> fetchFunction) {
+        Debug.printMethodInfo();
         setReference(reference);
         setFetchFunction(fetchFunction);
     }
 
-    public LazyFetch(T object, Function<Integer, T> fetchFunction) {
+    public LazyFetch(T object, Function<IntegerList, T> fetchFunction) {
+        Debug.printMethodInfo();
         set(object);
         setFetchFunction(fetchFunction);
     }
 
-    public LazyFetch(Function<Integer, T> fetchFunction) {
+    public LazyFetch(Function<IntegerList, T> fetchFunction) {
+        Debug.printMethodInfo();
         setFetchFunction(fetchFunction);
     }
 
-    T get() {
+    public T get() {
 
         if (object != null) {
             return object;
-        } if (reference != 0) {
-            set(fetchFunction.apply(reference));
+        } if (reference.size() != 0 && fetchFunction != null) {
+            Debug.printf("Fetch to cache %s\n", reference.toString());
+            object = fetchFunction.apply(reference);
             return object;
         }
 
         return null;
     }
 
-    void set(T entity) {
+    public void set(T entity) {
 
-        object = entity;
 
-        if (object != null) {
-            reference =  EntityClassInfo.of(object.getClass()).getIdField().get(object);
+
+        if (entity != null) {
+            reference =  EntityClassInfo.of(entity.getClass()).getIds(entity);
         }
         else {
-            setReference(0);
+
+            Debug.printf("@ LazyFetch.set(null) on Ref#%s\n", reference);
+            Debug.printStackTrace();
+            //setReference(IntegerList.emptyList());
         }
 
+        object = entity;
     }
 
-    public Integer getReference() {
+    public void invalidate() {
+
+        object=null;
+    }
+
+    public IntegerList getReference() {
 
         return reference;
 
     }
 
-    public void setReference(Integer reference) {
-        this.reference = reference==null?0:reference;
-
+    public void setReference(IntegerList reference) {
+       // Debug.printStack();
+        this.reference = reference==null? IntegerList.emptyList() :reference;
+        Debug.printf("LazyFetch Set reference to %s\n", this.reference.toString());
         //Invalidate the object
         object = null;
     }
 
-    public Function<Integer, T> getFetchFunction() {
+    public Function<IntegerList, T> getFetchFunction() {
         return fetchFunction;
     }
 
-    public void setFetchFunction(Function<Integer, T> fetchFunction) {
+    public void setFetchFunction(Function<IntegerList, T> fetchFunction) {
         Objects.requireNonNull(fetchFunction);
 
         this.fetchFunction = fetchFunction;
@@ -76,7 +90,7 @@ public class LazyFetch<T> {
 
     @Override
     public String toString() {
-        return String.format("%d:%s", reference, object.toString());
+        return String.format("(%s:%s)", reference, object==null?"null":object.toString());
     }
 
     @Override

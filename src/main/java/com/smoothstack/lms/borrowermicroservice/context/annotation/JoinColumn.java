@@ -7,6 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface JoinColumn {
 
     String name();
-    String prompt() default "";
+    String referencedFieldName();
     String referencedColumnName() default "";
 }

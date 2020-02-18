@@ -48,7 +48,6 @@ public class FieldInfo {
             getField().setAccessible(access);
 
 
-
             return (R) object;
         } catch (IllegalAccessException e) {
             Debug.printException(e);

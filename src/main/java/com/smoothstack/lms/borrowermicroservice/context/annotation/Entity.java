@@ -8,5 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface Entity {
-    Class<? extends CrudRepository> defaultRepository() default CrudRepository.class;
+    Class<? extends CrudRepository> repository() default CrudRepository.class;
 }

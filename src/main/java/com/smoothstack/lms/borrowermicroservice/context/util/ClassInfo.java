@@ -52,5 +52,15 @@ public class ClassInfo {
         return getDeclaredFieldsAsList(clazz);
     }
 
+    public Field getDeclaredField(String name) {
+        try {
+            return clazz.getDeclaredField(name);
+        } catch (NoSuchFieldException e) {
+            Debug.printException(e);
+            return null;
+        }
+
+    }
+
 
 }

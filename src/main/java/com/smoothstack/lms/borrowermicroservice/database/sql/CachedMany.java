@@ -8,15 +8,16 @@ import java.util.function.Function;
 
 public class CachedMany<T> {
 
-    private final HashMap<Integer, CachedOne<T>> cache;
-    Function<Integer, T> fetchFunction;
 
-    public CachedMany(Function<Integer, T> fetchFunction) {
+    private final HashMap<IntegerList, CachedOne<T>> cache;
+    Function<IntegerList, T> fetchFunction;
+
+    public CachedMany(Function<IntegerList, T> fetchFunction) {
         this.fetchFunction = fetchFunction;
-        this.cache = new HashMap<Integer, CachedOne<T>>();
+        this.cache = new HashMap<IntegerList, CachedOne<T>>();
     }
 
-    public static <R> CachedMany<R> of(Class<R> clazz, Function<Integer, R> fetchFunction) {
+    public static <R> CachedMany<R> of(Class<R> clazz, Function<IntegerList, R> fetchFunction) {
         return new CachedMany<R> (fetchFunction);
     }
 
@@ -32,16 +33,16 @@ public class CachedMany<T> {
     public void set(T value) {
         if (value == null) return;
 
-        int id = EntityClassInfo.of(value.getClass()).getIdField().get(value);
-        CachedOne<T> cachedOne = cache.get(id);
+        IntegerList ids = new IntegerList(EntityClassInfo.of(value.getClass()).getIds(value));
+        CachedOne<T> cachedOne = cache.get(ids);
 
         if (cachedOne == null)
-            cache.put(id, CachedOne.of(value, fetchFunction));
+            cache.put(ids, CachedOne.of(value, fetchFunction));
         else
             cachedOne.set(value);
     }
 
-    public HashMap<Integer, CachedOne<T>> getCache() {
+    public HashMap<IntegerList, CachedOne<T>> getCache() {
         return cache;
     }
 }

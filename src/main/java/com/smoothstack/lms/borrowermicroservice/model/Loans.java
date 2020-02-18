@@ -1,25 +1,28 @@
 package com.smoothstack.lms.borrowermicroservice.model;
 
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Column;
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Entity;
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Table;
+import com.smoothstack.lms.borrowermicroservice.context.annotation.*;
+import com.smoothstack.lms.borrowermicroservice.database.sql.RelationToOne;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "tbl_book_loans")
 public class Loans /*implements Entity<Loans>*/ {
 
-//    @OneToOne(Book.class)
-//    @JoinColumn(name = "bookId", referencedColumnName = "bookId")
+    @Id(1)
+    @ToOne(Book.class)
+    @JoinColumn(name = "bookId", referencedFieldName = "id", referencedColumnName = "bookId")
     private Book book;
 
-//    @OneToOne(Library.class)
-//    @JoinColumn(name = "branchId", referencedColumnName = "branchId")
+    @Id(2)
+    @ToOne(Library.class)
+    @JoinColumn(name = "branchId", referencedFieldName = "id", referencedColumnName = "branchId")
     private Library library;
 
-//    @OneToOne(Borrower.class)
-//    @JoinColumn(name = "cardNo", referencedColumnName = "cardNo")
+    @Id(3)
+    @ToOne(Borrower.class)
+    @JoinColumn(name = "cardNo", referencedFieldName = "id", referencedColumnName = "cardNo")
     private Borrower borrower;
 
     @Column(name = "dateOut")
@@ -32,6 +35,7 @@ public class Loans /*implements Entity<Loans>*/ {
     private LocalDate in;
 
     public Loans() {
+
     }
 
     public Book getBook() {
@@ -66,6 +70,10 @@ public class Loans /*implements Entity<Loans>*/ {
         this.out = out;
     }
 
+    public void setOut(Date out) {
+        this.out = out==null?null:out.toLocalDate();
+    }
+
     public LocalDate getDue() {
         return due;
     }
@@ -74,11 +82,31 @@ public class Loans /*implements Entity<Loans>*/ {
         this.due = due;
     }
 
+    public void setDue(Date due) {
+        this.due = due==null?null:due.toLocalDate();
+    }
+
     public LocalDate getIn() {
         return in;
     }
 
     public void setIn(LocalDate in) {
         this.in = in;
+    }
+
+    public void setIn(Date in) {
+        this.in = in==null?null:in.toLocalDate();
+    }
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Loans{");
+        sb.append("book=").append(getBook());
+        sb.append(", library=").append(getLibrary());
+        sb.append(", borrower=").append(getBorrower());
+        sb.append(", out=").append(out);
+        sb.append(", due=").append(due);
+        sb.append(", in=").append(in);
+        sb.append('}');
+        return sb.toString();
     }
 }
