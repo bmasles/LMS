@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/borrower")
-public class LibraryController {
+public class BorrowerController {
 
     private BorrowerService borrowerService;
 
