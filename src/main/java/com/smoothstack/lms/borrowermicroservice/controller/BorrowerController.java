@@ -6,6 +6,7 @@ import com.smoothstack.lms.borrowermicroservice.service.BorrowerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,9 +57,13 @@ public class BorrowerController {
         this.loansCrudRepository = loansCrudRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/library/{libraryId}/books")
-    ResponseEntity<List<Copies>> listBook(@PathVariable("libraryId") int libraryId,
-                                          @RequestParam("minCopies") Optional<Integer> minCopies) {
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = "/library/{libraryId}/books",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            )
+    public ResponseEntity<List<Copies>> listBook(@PathVariable("libraryId") int libraryId,
+                                                 @RequestParam("minCopies") Optional<Integer> minCopies) {
 
         Optional<Library> library = libraryCrudRepository.findByIds(libraryId);
 
@@ -68,15 +73,18 @@ public class BorrowerController {
 
             return new ResponseEntity<>(bookList, HttpStatus.OK);
 
-        }
-        else {
+        } else {
 
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{borrowerId}/books")
-    ResponseEntity<List<Loans>> listLoans(@PathVariable("borrowerId") int borrowerId) {
+    @RequestMapping(
+            method = RequestMethod.GET,
+            path = "/{borrowerId}/books",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            )
+    public ResponseEntity<List<Loans>> listLoans(@PathVariable("borrowerId") int borrowerId) {
 
         Optional<Borrower> borrower = borrowerCrudRepository.findByIds(borrowerId);
 
@@ -86,39 +94,44 @@ public class BorrowerController {
 
             return new ResponseEntity<>(bookList, HttpStatus.OK);
 
-        }
-        else {
+        } else {
 
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, path = "/{borrowerId}/library/{libraryId}/book/{bookId}/loan")
-    ResponseEntity borrowBook(@PathVariable("borrowerId") int borrowerId,
-                                       @PathVariable("libraryId") int libraryId,
-                                       @PathVariable("bookId") int bookId ) {
+    @RequestMapping(
+            method = RequestMethod.PUT,
+            path = "/{borrowerId}/library/{libraryId}/book/{bookId}/loan",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            )
+    public ResponseEntity borrowBook(@PathVariable("borrowerId") int borrowerId,
+                              @PathVariable("libraryId") int libraryId,
+                              @PathVariable("bookId") int bookId) {
 
         Optional<Borrower> borrower = borrowerCrudRepository.findByIds(borrowerId);
         Optional<Library> library = libraryCrudRepository.findByIds(libraryId);
         Optional<Book> book = bookCrudRepository.findByIds(bookId);
 
 
-
         if (borrower.isPresent() && library.isPresent() && book.isPresent()) {
 
             return borrowerService.checkoutBookFromLibraryByBorrower(
-                                        borrower.get(), library.get(), book.get());
-        }
-        else {
+                    borrower.get(), library.get(), book.get());
+        } else {
 
             return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).build();
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/{borrowerId}/library/{libraryId}/book/{bookId}/return")
-    ResponseEntity returnBook(@PathVariable("borrowerId") int borrowerId,
-                          @PathVariable("libraryId") int libraryId,
-                          @PathVariable("bookId") int bookId ) {
+    @RequestMapping(
+            method = RequestMethod.POST,
+            path = "/{borrowerId}/library/{libraryId}/book/{bookId}/return",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+            )
+    public ResponseEntity returnBook(@PathVariable("borrowerId") int borrowerId,
+                              @PathVariable("libraryId") int libraryId,
+                              @PathVariable("bookId") int bookId) {
 
         Optional<Borrower> borrower = borrowerCrudRepository.findByIds(borrowerId);
         Optional<Library> library = libraryCrudRepository.findByIds(libraryId);
@@ -130,12 +143,10 @@ public class BorrowerController {
             if (loans.isPresent()) {
                 return borrowerService.returnBookToLibraryByBorrower(
                         loans.get());
-            }
-            else {
+            } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
-        }
-        else {
+        } else {
 
             return ResponseEntity.status(HttpStatus.FAILED_DEPENDENCY).build();
         }

@@ -23,7 +23,8 @@ public class CrudRepositoryFactory {
     public static void registerRepository(Class clazz, CrudRepository crudRepository) {
         repositoryMap.put(clazz, crudRepository);
     }
-        public static <R> CrudRepository<R> getRepository(Class<R> clazz) {
+
+    public static <R> CrudRepository<R> getRepository(Class<R> clazz) {
         Debug.printf("Lookup repository for %s\n", clazz.getSimpleName());
         if (repositoryMap.containsKey(clazz))
             return (CrudRepository<R>) repositoryMap.get(clazz);
@@ -37,9 +38,8 @@ public class CrudRepositoryFactory {
                 CrudRepository<R> repository = (CrudRepository<R>) entity.get().repository().getDeclaredConstructor(Class.class).newInstance(clazz);
                 //repository.init(clazz);
                 repositoryMap.put(clazz, repository);
-            }
-            else {
-                throw new InstantiationException("Missing @Entity for"+clazz.getSimpleName());
+            } else {
+                throw new InstantiationException("Missing @Entity for" + clazz.getSimpleName());
             }
 
             return (CrudRepository<R>) repositoryMap.get(clazz);
@@ -50,22 +50,22 @@ public class CrudRepositoryFactory {
         return null;
     }
 
-    @Bean(name="BookRepository")
+    @Bean(name = "BookRepository")
     public CrudRepository<Book> bookRepository() {
         return getRepository(Book.class);
     }
 
-    @Bean(name="LibraryRepository")
+    @Bean(name = "LibraryRepository")
     public CrudRepository<Library> libraryRepository() {
         return getRepository(Library.class);
     }
 
-    @Bean(name="BorrowerRepository")
+    @Bean(name = "BorrowerRepository")
     public CrudRepository<Borrower> borrowerRepository() {
         return getRepository(Borrower.class);
     }
 
-    @Bean(name="LoanRepository")
+    @Bean(name = "LoanRepository")
     public CrudRepository<Loans> loanRepository() {
         return getRepository(Loans.class);
     }
