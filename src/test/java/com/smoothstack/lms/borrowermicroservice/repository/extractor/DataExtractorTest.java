@@ -43,9 +43,6 @@ class DataExtractorTest {
         return resultSet;
     }
 
-
-
-
     @Test
     void getBook() throws SQLException {
         Book book = DataExtractor.getBook(mockBookRs());
@@ -79,7 +76,6 @@ class DataExtractorTest {
     }
 
 
-
     @Test
     void getLoans() {
     }
@@ -88,5 +84,8 @@ class DataExtractorTest {
     void getCopies() {
     }
 
+    @Test
+    void getGenre() {
+    }
 
 }
