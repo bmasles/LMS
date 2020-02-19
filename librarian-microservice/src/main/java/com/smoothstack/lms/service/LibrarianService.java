@@ -48,7 +48,7 @@ public class LibrarianService {
 			return rowsAffected;
 		} catch (Exception e) {
 			platformTransactionManager.rollback(status);
-			throw (e);
+			throw e;
 		}
 	}
 
@@ -68,7 +68,7 @@ public class LibrarianService {
 			platformTransactionManager.commit(status);
 		} catch (Exception e) {
 			platformTransactionManager.rollback(status);
-			throw (e);
+			throw e;
 		}
 	}
 
@@ -81,7 +81,7 @@ public class LibrarianService {
 			return rowsAffected;
 		} catch (Exception e) {
 			platformTransactionManager.rollback(status);
-			throw (e);
+			throw e;
 		}
 	}
 

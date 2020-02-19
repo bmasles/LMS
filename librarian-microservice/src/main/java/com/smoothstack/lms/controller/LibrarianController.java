@@ -93,7 +93,7 @@ public class LibrarianController {
 		}
 	}
 
-	@GetMapping(path = "/librarian/bookcopies/{bookId}/{libraryBranchId}")
+	@GetMapping(path = "/librarian/bookcopies/book/{bookId}/librarybranch/{libraryBranchId}")
 	@Produces({ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<BookCopy> getBookCopy(@PathVariable int bookId, @PathVariable int libraryBranchId) {
 		try {
@@ -119,7 +119,8 @@ public class LibrarianController {
 			if (bookCopy.getAmount() == null || bookCopy.getAmount() < 0)
 				return ResponseEntity.badRequest().build();
 			librarianService.addBookCopy(bookCopy);
-			URI uri = UriComponentsBuilder.fromUriString("/librarian/bookcopies/{bookId}/{libraryBranchId}")
+			URI uri = UriComponentsBuilder
+					.fromUriString("/librarian/bookcopies/book/{bookId}/librarybranch/{libraryBranchId}")
 					.buildAndExpand(bookCopy.getBook().getId(), bookCopy.getLibraryBranch().getId()).toUri();
 			return ResponseEntity.created(uri).build();
 		} catch (DataIntegrityViolationException e) {
