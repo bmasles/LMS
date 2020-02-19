@@ -1,0 +1,6 @@
+2020-02-15 17:54:52 jdbc[10]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TBL_BOOK" not found; SQL statement:
+select * from tbl_book [42102-200]
+2020-02-15 17:57:40 jdbc[10]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TBL_BOOK" not found; SQL statement:
+select * from tbl_book [42102-200]

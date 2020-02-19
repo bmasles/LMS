@@ -1,0 +1,3 @@
+[submodule "lms-borrower"]
+	path = lms-borrower
+	url = git@github.com:Jindanupajit-SS/lms-borrower.git
