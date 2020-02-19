@@ -1,0 +1,4 @@
+com\smoothstack\lms\adminmicroservice\AdminServiceTest.class
+com\smoothstack\lms\adminmicroservice\ModelTests.class
+com\smoothstack\lms\adminmicroservice\AdminMicroserviceApplicationTests.class
+com\smoothstack\lms\adminmicroservice\AdminConrollerTest.class

@@ -1,0 +1,7 @@
+com\smoothstack\lms\borrowermicroservice\database\ConnectionFactoryTest.class
+com\smoothstack\lms\borrowermicroservice\controller\MicroservicePingTest.class
+com\smoothstack\lms\borrowermicroservice\repository\BookRepositoryTest.class
+com\smoothstack\lms\borrowermicroservice\persistance\CrudRepositoryFactoryTest.class
+com\smoothstack\lms\borrowermicroservice\database\sql\CachedOneTest.class
+com\smoothstack\lms\borrowermicroservice\repository\extractor\DataExtractorTest.class
+com\smoothstack\lms\borrowermicroservice\BorrowerMicroserviceApplicationTests.class
