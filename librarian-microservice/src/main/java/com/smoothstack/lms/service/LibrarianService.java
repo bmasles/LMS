@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.smoothstack.lms.dao.BookCopyDao;
 import com.smoothstack.lms.dao.BookDao;
@@ -15,6 +18,9 @@ import com.smoothstack.lms.model.LibraryBranch;
 
 @Service
 public class LibrarianService {
+
+	@Autowired
+	private PlatformTransactionManager platformTransactionManager;
 
 	@Autowired
 	private LibraryBranchDao libraryBranchDao;
@@ -34,7 +40,16 @@ public class LibrarianService {
 	}
 
 	public int updateLibraryBranch(LibraryBranch libraryBranch) throws SQLException {
-		return libraryBranchDao.update(libraryBranch);
+		DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+		TransactionStatus status = platformTransactionManager.getTransaction(defaultTransactionDefinition);
+		try {
+			int rowsAffected = libraryBranchDao.update(libraryBranch);
+			platformTransactionManager.commit(status);
+			return rowsAffected;
+		} catch (Exception e) {
+			platformTransactionManager.rollback(status);
+			throw (e);
+		}
 	}
 
 	public List<Book> getBooks() throws SQLException {
@@ -46,11 +61,28 @@ public class LibrarianService {
 	}
 
 	public void addBookCopy(BookCopy bookCopy) throws SQLException {
-		bookCopyDao.create(bookCopy);
+		DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+		TransactionStatus status = platformTransactionManager.getTransaction(defaultTransactionDefinition);
+		try {
+			bookCopyDao.create(bookCopy);
+			platformTransactionManager.commit(status);
+		} catch (Exception e) {
+			platformTransactionManager.rollback(status);
+			throw (e);
+		}
 	}
 
 	public int updateBookCopy(BookCopy bookCopy) throws SQLException {
-		return bookCopyDao.update(bookCopy);
+		DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
+		TransactionStatus status = platformTransactionManager.getTransaction(defaultTransactionDefinition);
+		try {
+			int rowsAffected = bookCopyDao.update(bookCopy);
+			platformTransactionManager.commit(status);
+			return rowsAffected;
+		} catch (Exception e) {
+			platformTransactionManager.rollback(status);
+			throw (e);
+		}
 	}
 
 }
