@@ -46,8 +46,12 @@ public class AuthorDAO extends BaseDAO<Author> {
 		return read("select * from tbl_author where authorName = ?", new Object[] { authorName });
 	}
 	
-	public Author readAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_author where authorId = ?", new Object[] {authorId}).get(0);
+	public Author readAuthorById(Integer authorId) throws ClassNotFoundException, SQLException, NotFound {
+		List<Author> authors = read("select * from tbl_author where authorId = ?", new Object[] {authorId});
+		if (authors.isEmpty())
+			throw new NotFound("Author with id: " + authorId);
+		else
+			return authors.get(0);
 	}
 
 	@Override

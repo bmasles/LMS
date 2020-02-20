@@ -37,8 +37,12 @@ public class BookDAO extends BaseDAO<Book> {
 		return read("select * from tbl_book", null);
 	}
 	
-	public Book readBookById(Integer bookId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_book where bookId = ?", new Object[] {bookId}).get(0);
+	public Book readBookById(Integer bookId) throws ClassNotFoundException, SQLException, NotFound {
+		List<Book> books = read("select * from tbl_book where bookId = ?", new Object[] {bookId});
+		if (books.isEmpty())
+			throw new NotFound("Book with id: " + bookId);
+		else
+			return books.get(0);
 	}
 	
 	public void insertBookAuthors(Author author, Book book) throws ClassNotFoundException, SQLException{
@@ -67,7 +71,11 @@ public class BookDAO extends BaseDAO<Book> {
 			Book b = new Book();
 			b.setBookId(rs.getInt("bookId"));
 			b.setTitle(rs.getString("title"));
-			b.setPublisher(pdao.readPublisherById(rs.getInt("pubId")));
+			try {
+				b.setPublisher(pdao.readPublisherById(rs.getInt("pubId")));
+			} catch (ClassNotFoundException | SQLException | NotFound e) {
+				e.printStackTrace();
+			}
 			b.setAuthors(adao.readFirstLevel("select * from tbl_author where authorId in"
 					+ "(select authorId from tbl_book_authors where bookId = ?)", new Object[] {b.getBookId()}));
 			b.setGenres(gdao.readFirstLevel("select * from tbl_genre where genre_id in"

@@ -12,6 +12,7 @@ import com.smoothstack.lms.adminmicroservice.dao.BorrowerDAO;
 import com.smoothstack.lms.adminmicroservice.dao.BranchDAO;
 import com.smoothstack.lms.adminmicroservice.dao.CopiesDAO;
 import com.smoothstack.lms.adminmicroservice.dao.GenreDAO;
+import com.smoothstack.lms.adminmicroservice.dao.NotFound;
 import com.smoothstack.lms.adminmicroservice.dao.PublisherDAO;
 import com.smoothstack.lms.adminmicroservice.model.Author;
 import com.smoothstack.lms.adminmicroservice.model.Book;
@@ -23,28 +24,27 @@ import com.smoothstack.lms.adminmicroservice.model.Publisher;
 
 @Service
 public class AdminService {
-	
+
 	@Autowired
 	AuthorDAO authorDao;
-	
+
 	@Autowired
 	BookDAO bookDao;
-	
+
 	@Autowired
 	GenreDAO genreDao;
-	
+
 	@Autowired
 	BorrowerDAO borrowerDao;
-	
+
 	@Autowired
 	BranchDAO branchDao;
-	
+
 	@Autowired
 	CopiesDAO copiesDao;
-	
+
 	@Autowired
 	PublisherDAO publisherDao;
-	
 
 	public void saveAuthor(Author auth) throws ClassNotFoundException, SQLException {
 		try {
@@ -94,7 +94,7 @@ public class AdminService {
 		}
 	}
 
-	public Author readAuthorById(Integer authorId) throws ClassNotFoundException, SQLException {
+	public Author readAuthorById(Integer authorId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return authorDao.readAuthorById(authorId);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -157,7 +157,7 @@ public class AdminService {
 		}
 	}
 
-	public Book readBookById(Integer bookId) throws ClassNotFoundException, SQLException {
+	public Book readBookById(Integer bookId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return bookDao.readBookById(bookId);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -212,7 +212,7 @@ public class AdminService {
 		}
 	}
 
-	public Genre readGenreById(Integer genreId) throws ClassNotFoundException, SQLException {
+	public Genre readGenreById(Integer genreId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return genreDao.readGenreById(genreId);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -261,7 +261,7 @@ public class AdminService {
 		}
 	}
 
-	public Borrower readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException {
+	public Borrower readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return borrowerDao.readBorrowerById(cardNo);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -311,7 +311,7 @@ public class AdminService {
 		}
 	}
 
-	public Branch readBranchById(Integer branchId) throws ClassNotFoundException, SQLException {
+	public Branch readBranchById(Integer branchId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return branchDao.readBranchById(branchId);
 		} catch (ClassNotFoundException | SQLException e) {
@@ -361,18 +361,9 @@ public class AdminService {
 		}
 	}
 
-	public List<Copies> readCopiesById(Integer branchId) throws ClassNotFoundException, SQLException {
+	public Copies readCopyById(Integer branchId, Integer bookId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
-			return copiesDao.readCopyById(branchId);
-		} catch (ClassNotFoundException | SQLException e) {
-			System.out.println("Could not read copies");
-			throw e;
-		}
-	}
-
-	public Copies readCopyById(Integer branchId, Integer bookId) throws ClassNotFoundException, SQLException {
-		try {
-			return copiesDao.readCopyById(branchId, bookId).get(0);
+			return copiesDao.readCopyById(branchId, bookId);
 		} catch (ClassNotFoundException | SQLException e) {
 			System.out.println("Could not read copies");
 			throw e;
@@ -420,7 +411,7 @@ public class AdminService {
 		}
 	}
 
-	public Publisher readPublisherById(Integer publisherId) throws ClassNotFoundException, SQLException {
+	public Publisher readPublisherById(Integer publisherId) throws ClassNotFoundException, SQLException, NotFound {
 		try {
 			return publisherDao.readPublisherById(publisherId);
 		} catch (ClassNotFoundException | SQLException e) {

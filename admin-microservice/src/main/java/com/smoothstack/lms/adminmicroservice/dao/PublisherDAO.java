@@ -39,8 +39,11 @@ public class PublisherDAO extends BaseDAO<Publisher> {
 		return read("select * from tbl_publisher", null);
 	}
 
-	public Publisher readPublisherById(Integer id) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_publisher where publisherId = ?", new Object[] { id }).get(0);
+	public Publisher readPublisherById(Integer id) throws ClassNotFoundException, SQLException, NotFound {
+		List<Publisher> publishers =  read("select * from tbl_publisher where publisherId = ?", new Object[] { id });
+		if (publishers.isEmpty())
+			throw new NotFound("Publisher with id: " + id);
+		else return publishers.get(0);
 	}
 
 	@Override

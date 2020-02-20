@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.smoothstack.lms.adminmicroservice.dao.NotFound;
 import com.smoothstack.lms.adminmicroservice.model.Author;
 import com.smoothstack.lms.adminmicroservice.model.Book;
 import com.smoothstack.lms.adminmicroservice.model.Borrower;
@@ -52,7 +53,7 @@ public class AdminController {
 		try {
 			Book book = adminService.readBookById(id);
 			return new ResponseEntity<Book>(book, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -103,7 +104,7 @@ public class AdminController {
 		try {
 			adminService.deleteBook(adminService.readBookById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -127,7 +128,7 @@ public class AdminController {
 		try {
 			Author author = adminService.readAuthorById(id);
 			return new ResponseEntity<Author>(author, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -172,7 +173,7 @@ public class AdminController {
 		try {
 			adminService.deleteAuthor(adminService.readAuthorById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -196,7 +197,7 @@ public class AdminController {
 		try {
 			Genre genre = adminService.readGenreById(id);
 			return new ResponseEntity<Genre>(genre, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -241,7 +242,7 @@ public class AdminController {
 		try {
 			adminService.deleteGenre(adminService.readGenreById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -265,7 +266,7 @@ public class AdminController {
 		try {
 			Borrower borrower = adminService.readBorrowerById(id);
 			return new ResponseEntity<Borrower>(borrower, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -312,7 +313,7 @@ public class AdminController {
 		try {
 			adminService.deleteBorrower(adminService.readBorrowerById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -336,7 +337,7 @@ public class AdminController {
 		try {
 			Branch branch = adminService.readBranchById(id);
 			return new ResponseEntity<Branch>(branch, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -381,7 +382,7 @@ public class AdminController {
 		try {
 			adminService.deleteBranch(adminService.readBranchById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -399,13 +400,13 @@ public class AdminController {
 		}
 	}
 
-	@GetMapping(path = "/administrator/copies/{branchId}/{bookId}")
+	@GetMapping(path = "/administrator/copies/branch/{branchId}/book/{bookId}")
 	@Produces({ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Copies> getCopy(@PathVariable int branchId, @PathVariable int bookId) {
 		try {
 			Copies copies = adminService.readCopyById(branchId, bookId);
 			return new ResponseEntity<Copies>(copies, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -430,7 +431,7 @@ public class AdminController {
 		}
 	}
 
-	@PutMapping(path = "administrator/copies/{branchId}/{bookId}")
+	@PutMapping(path = "administrator/copies/branch/{branchId}/book/{bookId}")
 	@Consumes({ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Void> updateCopies(@RequestBody Copies copies, @PathVariable int branchId,
 			@PathVariable int bookId) {
@@ -447,12 +448,12 @@ public class AdminController {
 		}
 	}
 
-	@DeleteMapping(path = "administrator/copies/{brancId}/{bookId}")
+	@DeleteMapping(path = "administrator/copies/branch/{branchId}/book/{bookId}")
 	public ResponseEntity<Void> deleteCopies(@PathVariable int branchId, @PathVariable int bookId) {
 		try {
 			adminService.deleteCopies(adminService.readCopyById(branchId, bookId));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -476,7 +477,7 @@ public class AdminController {
 		try {
 			Publisher publisher = adminService.readPublisherById(id);
 			return new ResponseEntity<Publisher>(publisher, HttpStatus.OK);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -523,7 +524,7 @@ public class AdminController {
 		try {
 			adminService.deletePublisher(adminService.readPublisherById(id));
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NotFound e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

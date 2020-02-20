@@ -11,48 +11,44 @@ import com.smoothstack.lms.adminmicroservice.model.Copies;
 
 @Component
 public class CopiesDAO extends BaseDAO<Copies> {
-	
+
 	public CopiesDAO() throws ClassNotFoundException, SQLException {
 		super();
 	}
 
 	public void addCopies(Copies copies) throws ClassNotFoundException, SQLException {
-		save("insert into tbl_book_copies (branchId,bookId,noOfCopies) values (?,?,?)", 
-				new Object[] {copies.getBranchId(),copies.getBookId(),copies.getNoOfCopies()});
+		save("insert into tbl_book_copies (branchId,bookId,noOfCopies) values (?,?,?)",
+				new Object[] { copies.getBranchId(), copies.getBookId(), copies.getNoOfCopies() });
 	}
 
 	public void updateCopies(Copies copies) throws SQLException, ClassNotFoundException {
-		save("update tbl_book_copies set noOfCopies = ? where bookId = ? and branchId = ?", 
-				new Object[]{copies.getNoOfCopies(),copies.getBookId(),copies.getBranchId()} );
+		save("update tbl_book_copies set noOfCopies = ? where bookId = ? and branchId = ?",
+				new Object[] { copies.getNoOfCopies(), copies.getBookId(), copies.getBranchId() });
 	}
 
 	public void deleteCopies(Copies copies) throws ClassNotFoundException, SQLException {
-		save("delete from tbl_book_copies where bookId = ? and branchId = ?"
-				,new Object[] {copies.getBookId(),copies.getBranchId()});
+		save("delete from tbl_book_copies where bookId = ? and branchId = ?",
+				new Object[] { copies.getBookId(), copies.getBranchId() });
 	}
-	
+
 	public void deleteCopiesByBookId(Integer bookId) throws ClassNotFoundException, SQLException {
-		save("delete from tbl_book_copies where bookId = ?"
-				, new Object[] {bookId});
+		save("delete from tbl_book_copies where bookId = ?", new Object[] { bookId });
 	}
-	
+
 	public void deleteCopiesByBranchId(Integer bookId) throws ClassNotFoundException, SQLException {
-		save("delete from tbl_book_copies where branchId = ?"
-				, new Object[] {bookId});
+		save("delete from tbl_book_copies where branchId = ?", new Object[] { bookId });
 	}
-	
+
 	public List<Copies> readCopies() throws ClassNotFoundException, SQLException {
 		return read("select * from tbl_book_copies", null);
 	}
-	
-	public List<Copies> readCopyById(Integer branchId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_book_copies where branchId = ?",
-				new Object[] {branchId});
-	}
-	
-	public List<Copies> readCopyById(Integer branchId, Integer bookId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_book_copies where branchId = ? and bookId = ?",
-				new Object[] {branchId,bookId});
+
+	public Copies readCopyById(Integer branchId, Integer bookId) throws ClassNotFoundException, SQLException, NotFound {
+		List<Copies> copies = read("select * from tbl_book_copies where branchId = ? and bookId = ?",
+				new Object[] { branchId, bookId });
+		if (copies.isEmpty())
+			throw new NotFound("Book copy with branch id: " + branchId + " and book id: " + bookId);
+		return copies.get(0);
 	}
 
 	@Override
