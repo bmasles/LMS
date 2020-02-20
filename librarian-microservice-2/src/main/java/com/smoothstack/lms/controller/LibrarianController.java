@@ -44,7 +44,7 @@ public class LibrarianController {
 
 	@GetMapping(path = "/librarian/test")
 	public String test() {
-		return "1";
+		return "2";
 	}
 
 	@GetMapping(path = "/librarian/librarybranches")
