@@ -7,6 +7,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,6 +34,22 @@ public class LibrarianController {
 
 	@Autowired
 	private LibrarianService librarianService;
+
+	@Autowired
+	private DiscoveryClient discoveryClient;
+
+	@RequestMapping("/service-instances/{applicationName}")
+	public List<ServiceInstance> serviceInstancesByApplicationName(@PathVariable String applicationName) {
+		return this.discoveryClient.getInstances(applicationName);
+	}
+
+	@Autowired
+	Environment environment;
+
+	@GetMapping(path = "/librarian/port")
+	public String port() {
+		return environment.getProperty("local.server.port");
+	}
 
 	@GetMapping(path = "/librarian/librarybranches")
 	@Produces({ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -93,7 +113,7 @@ public class LibrarianController {
 		}
 	}
 
-	@GetMapping(path = "/librarian/bookcopies/{bookId}/{libraryBranchId}")
+	@GetMapping(path = "/librarian/bookcopies/books/{bookId}/librarybranches/{libraryBranchId}")
 	@Produces({ MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<BookCopy> getBookCopy(@PathVariable int bookId, @PathVariable int libraryBranchId) {
 		try {
@@ -119,7 +139,8 @@ public class LibrarianController {
 			if (bookCopy.getAmount() == null || bookCopy.getAmount() < 0)
 				return ResponseEntity.badRequest().build();
 			librarianService.addBookCopy(bookCopy);
-			URI uri = UriComponentsBuilder.fromUriString("/librarian/bookcopies/{bookId}/{libraryBranchId}")
+			URI uri = UriComponentsBuilder
+					.fromUriString("/librarian/bookcopies/book/{bookId}/librarybranch/{libraryBranchId}")
 					.buildAndExpand(bookCopy.getBook().getId(), bookCopy.getLibraryBranch().getId()).toUri();
 			return ResponseEntity.created(uri).build();
 		} catch (DataIntegrityViolationException e) {

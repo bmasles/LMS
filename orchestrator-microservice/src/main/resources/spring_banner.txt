@@ -1,7 +1,0 @@
-${AnsiBackground.BRIGHT_MAGENTA}                                                                                                   ${AnsiBackground.DEFAULT}
-${AnsiColor.BRIGHT_MAGENTA}LMS Microservice Orchestrator (Proxy) ${application.formatted-version}${AnsiColor.DEFAULT}
-Spring Boot ${spring-boot.formatted-version}
-@Author ${AnsiColor.BRIGHT_GREEN}Krissada Jindanupajit${AnsiColor.DEFAULT}
-@Group BAK (Burke Masles, Aland Chang, Krissada Jindanupajit) January 2020
-@Company Smoothstack., Inc.
-${AnsiBackground.BRIGHT_MAGENTA}                                                                                                   ${AnsiBackground.DEFAULT}
