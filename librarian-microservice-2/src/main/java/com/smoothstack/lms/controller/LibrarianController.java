@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -42,9 +43,12 @@ public class LibrarianController {
 		return this.discoveryClient.getInstances(applicationName);
 	}
 
-	@GetMapping(path = "/librarian/test")
-	public String test() {
-		return "2";
+	@Autowired
+	Environment environment;
+
+	@GetMapping(path = "/librarian/port")
+	public String port() {
+		return environment.getProperty("local.server.port");
 	}
 
 	@GetMapping(path = "/librarian/librarybranches")
