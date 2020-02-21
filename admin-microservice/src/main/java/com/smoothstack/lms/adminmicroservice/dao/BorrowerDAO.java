@@ -38,8 +38,12 @@ public class BorrowerDAO extends BaseDAO<Borrower> {
 		return read("select * from tbl_borrower", null);
 	}
 	
-	public Borrower readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_borrower where cardNo = ?", new Object[] {cardNo}).get(0);
+	public Borrower readBorrowerById(Integer cardNo) throws ClassNotFoundException, SQLException, NotFound {
+		List<Borrower> borrowers = read("select * from tbl_borrower where cardNo = ?", new Object[] {cardNo});
+		if (borrowers.isEmpty())
+			throw new NotFound("Borrower with cardNo: " + cardNo);
+		else
+			return borrowers.get(0);
 	}
 
 	@Override

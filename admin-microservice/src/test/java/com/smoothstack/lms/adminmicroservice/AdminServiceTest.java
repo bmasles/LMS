@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.smoothstack.lms.adminmicroservice.dao.NotFound;
 import com.smoothstack.lms.adminmicroservice.model.Author;
 import com.smoothstack.lms.adminmicroservice.model.Book;
 import com.smoothstack.lms.adminmicroservice.model.Borrower;
@@ -24,7 +25,7 @@ class AdminServiceTest {
 	AdminService adminService;
 
 	@Test
-	void testAuthor() throws ClassNotFoundException, SQLException {
+	void testAuthor() throws ClassNotFoundException, SQLException, NotFound {
 		Author author = new Author();
 		author.setAuthorName("Test");
 		author.setBooks(new ArrayList<Book>());
@@ -34,7 +35,7 @@ class AdminServiceTest {
 		adminService.updateAuthor(author);
 		Assertions.assertEquals("Test2", adminService.readAuthorById(author.getAuthorId()).getAuthorName());
 		adminService.deleteAuthor(author);
-		Assertions.assertThrows(IndexOutOfBoundsException.class,
+		Assertions.assertThrows(NotFound.class,
 				() -> adminService.readAuthorById(author.getAuthorId()));
 	}
 
@@ -44,13 +45,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadAuthorById() throws ClassNotFoundException, SQLException {
+	void testReadAuthorById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readAuthorById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readAuthorById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readAuthorById(0));
 	}
 
 	@Test
-	void testBook() throws ClassNotFoundException, SQLException {
+	void testBook() throws ClassNotFoundException, SQLException, NotFound {
 		Book book = new Book();
 		book.setAuthors(new ArrayList<Author>());
 		book.setGenres(new ArrayList<Genre>());
@@ -63,7 +64,7 @@ class AdminServiceTest {
 		adminService.updateBook(book);
 		Assertions.assertEquals("Test2", adminService.readBookById(book.getBookId()).getTitle());
 		adminService.deleteBook(book);
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readBookById(book.getBookId()));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readBookById(book.getBookId()));
 	}
 
 	@Test
@@ -72,13 +73,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadBookById() throws ClassNotFoundException, SQLException {
+	void testReadBookById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readBookById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readBookById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readBookById(0));
 	}
 
 	@Test
-	void testGenre() throws ClassNotFoundException, SQLException {
+	void testGenre() throws ClassNotFoundException, SQLException, NotFound {
 		Genre genre = new Genre();
 		genre.setGenreName("Test");
 		genre.setBooks(new ArrayList<Book>());
@@ -88,7 +89,7 @@ class AdminServiceTest {
 		adminService.updateGenre(genre);
 		Assertions.assertEquals("Test2", adminService.readGenreById(genre.getGenreId()).getGenreName());
 		adminService.deleteGenre(genre);
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readGenreById(genre.getGenreId()));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readGenreById(genre.getGenreId()));
 	}
 
 	@Test
@@ -97,13 +98,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadGenreById() throws ClassNotFoundException, SQLException {
+	void testReadGenreById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readGenreById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readGenreById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readGenreById(0));
 	}
 
 	@Test
-	void testBorrower() throws ClassNotFoundException, SQLException {
+	void testBorrower() throws ClassNotFoundException, SQLException, NotFound{
 		Borrower borrower = new Borrower();
 		borrower.setName("Test");
 		borrower.setAddress("123");
@@ -114,7 +115,7 @@ class AdminServiceTest {
 		adminService.updateBorrower(borrower);
 		Assertions.assertEquals("Test2", adminService.readBorrowerById(borrower.getCardNo()).getName());
 		adminService.deleteBorrower(borrower);
-		Assertions.assertThrows(IndexOutOfBoundsException.class,
+		Assertions.assertThrows(NotFound.class,
 				() -> adminService.readBorrowerById(borrower.getCardNo()));
 	}
 
@@ -124,13 +125,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadBorrowerById() throws ClassNotFoundException, SQLException {
+	void testReadBorrowerById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readBorrowerById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readBorrowerById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readBorrowerById(0));
 	}
 
 	@Test
-	void testBranch() throws ClassNotFoundException, SQLException {
+	void testBranch() throws ClassNotFoundException, SQLException, NotFound {
 		Branch branch = new Branch();
 		branch.setBranchName("Test");
 		branch.setBranchAddress("123");
@@ -140,7 +141,7 @@ class AdminServiceTest {
 		adminService.updateBranch(branch);
 		Assertions.assertEquals("Test2", adminService.readBranchById(branch.getBranchId()).getBranchName());
 		adminService.deleteBranch(branch);
-		Assertions.assertThrows(IndexOutOfBoundsException.class,
+		Assertions.assertThrows(NotFound.class,
 				() -> adminService.readBranchById(branch.getBranchId()));
 	}
 
@@ -150,13 +151,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadBranchById() throws ClassNotFoundException, SQLException {
+	void testReadBranchById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readBranchById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readBranchById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readBranchById(0));
 	}
 
 	@Test
-	void testCopies() throws ClassNotFoundException, SQLException {
+	void testCopies() throws ClassNotFoundException, SQLException, NotFound {
 		Copies copy = new Copies();
 		copy.setBookId(5);
 		copy.setBranchId(3);
@@ -167,7 +168,7 @@ class AdminServiceTest {
 		adminService.updateCopies(copy);
 		Assertions.assertEquals(67, adminService.readCopyById(copy.getBranchId(), copy.getBookId()).getNoOfCopies());
 		adminService.deleteCopies(copy);
-		Assertions.assertThrows(IndexOutOfBoundsException.class,
+		Assertions.assertThrows(NotFound.class,
 				() -> adminService.readCopyById(copy.getBranchId(), copy.getBookId()));
 	}
 
@@ -177,13 +178,13 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadCopiesById() throws ClassNotFoundException, SQLException {
-		Assertions.assertNotNull(adminService.readCopiesById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readCopiesById(0).get(0));
+	void testReadCopiesById() throws ClassNotFoundException, SQLException, NotFound {
+		Assertions.assertNotNull(adminService.readCopyById(1,1));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readCopyById(0,0));
 	}
 
 	@Test
-	void testPublisher() throws ClassNotFoundException, SQLException {
+	void testPublisher() throws ClassNotFoundException, SQLException, NotFound {
 		Publisher publisher = new Publisher();
 		publisher.setPublisherName("Test");
 		publisher.setPublisherAddress("123");
@@ -194,7 +195,7 @@ class AdminServiceTest {
 		adminService.updatePublisher(publisher);
 		Assertions.assertEquals("Test2", adminService.readPublisherById(publisher.getPublisherId()).getPublisherName());
 		adminService.deletePublisher(publisher);
-		Assertions.assertThrows(IndexOutOfBoundsException.class,
+		Assertions.assertThrows(NotFound.class,
 				() -> adminService.readPublisherById(publisher.getPublisherId()));
 	}
 
@@ -204,9 +205,9 @@ class AdminServiceTest {
 	}
 
 	@Test
-	void testReadPublisherById() throws ClassNotFoundException, SQLException {
+	void testReadPublisherById() throws ClassNotFoundException, SQLException, NotFound {
 		Assertions.assertNotNull(adminService.readPublisherById(1));
-		Assertions.assertThrows(IndexOutOfBoundsException.class, () -> adminService.readPublisherById(0));
+		Assertions.assertThrows(NotFound.class, () -> adminService.readPublisherById(0));
 	}
 
 }

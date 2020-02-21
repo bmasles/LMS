@@ -34,8 +34,11 @@ public class GenreDAO extends BaseDAO<Genre> {
 		return read("select * from tbl_genre", null);
 	}
 	
-	public Genre readGenreById(Integer genreId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_genre where genre_id = ?", new Object[] {genreId}).get(0);
+	public Genre readGenreById(Integer genreId) throws ClassNotFoundException, SQLException, NotFound {
+		List<Genre> genres = read("select * from tbl_genre where genre_id = ?", new Object[] {genreId});
+		if (genres.isEmpty())
+			throw new NotFound("Genre with id: " + genreId);
+		return genres.get(0);
 	}
 
 	public void insertBookGenres(Genre genre, Book book) throws ClassNotFoundException, SQLException {

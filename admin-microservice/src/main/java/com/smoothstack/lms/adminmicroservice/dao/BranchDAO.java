@@ -38,8 +38,12 @@ public class BranchDAO extends BaseDAO<Branch> {
 		return read("select * from tbl_library_branch", null);
 	}
 	
-	public Branch readBranchById(Integer branchId) throws ClassNotFoundException, SQLException {
-		return read("select * from tbl_library_branch where branchId = ?", new Object[] {branchId}).get(0);
+	public Branch readBranchById(Integer branchId) throws ClassNotFoundException, SQLException, NotFound {
+		List<Branch> branches = read("select * from tbl_library_branch where branchId = ?", new Object[] {branchId});
+		if (branches.isEmpty())
+			throw new NotFound("Branch with id: " + branchId);
+		else
+			return branches.get(0);
 	}
 
 	@Override
