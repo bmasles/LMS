@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/borrower")
+@RequestMapping({
+        "/borrowers",
+        "/borrower"})
 public class BorrowerController {
 
     private BorrowerService borrowerService;
@@ -59,7 +61,10 @@ public class BorrowerController {
 
     @RequestMapping(
             method = RequestMethod.GET,
-            path = "/library/{libraryId}/books",
+            path = {
+                    "/libraries/{libraryId}/books",
+                    "/library/{libraryId}/book"
+            },
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
             )
     public ResponseEntity<List<Copies>> listBook(@PathVariable("libraryId") int libraryId,
@@ -81,7 +86,10 @@ public class BorrowerController {
 
     @RequestMapping(
             method = RequestMethod.GET,
-            path = "/{borrowerId}/books",
+            path = {
+                    "/{borrowerId}/books",
+                    "/{borrowerId}/book"
+            },
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
             )
     public ResponseEntity<List<Loans>> listLoans(@PathVariable("borrowerId") int borrowerId) {
@@ -101,8 +109,11 @@ public class BorrowerController {
     }
 
     @RequestMapping(
-            method = RequestMethod.PUT,
-            path = "/{borrowerId}/library/{libraryId}/book/{bookId}/loan",
+            method = RequestMethod.POST,
+            path = {
+                    "/{borrowerId}/libraries/{libraryId}/books/{bookId}/loan",
+                    "/{borrowerId}/library/{libraryId}/book/{bookId}/loan"
+            },
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
             )
     public ResponseEntity borrowBook(@PathVariable("borrowerId") int borrowerId,
@@ -125,8 +136,11 @@ public class BorrowerController {
     }
 
     @RequestMapping(
-            method = RequestMethod.POST,
-            path = "/{borrowerId}/library/{libraryId}/book/{bookId}/return",
+            method = RequestMethod.PUT,
+            path = {
+                    "/{borrowerId}/libraries/{libraryId}/books/{bookId}/return",
+                    "/{borrowerId}/library/{libraryId}/book/{bookId}/return"
+            },
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
             )
     public ResponseEntity returnBook(@PathVariable("borrowerId") int borrowerId,

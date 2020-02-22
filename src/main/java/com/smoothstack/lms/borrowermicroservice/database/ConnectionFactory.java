@@ -51,16 +51,28 @@ public class ConnectionFactory {
 
 
     public ConnectionFactory() {
+
     }
 
     public ConnectionFactory(File configFile) {
         loadProperties(configFile);
+
     }
 
     public ConnectionFactory(String configFileName) {
 
         Debug.printf("Load config: %s\n", configFileName);
         loadProperties(new File(configFileName));
+    }
+
+    public boolean isDriverPresent() {
+        try {
+            Class.forName(driver);
+            return true;
+        } catch (ClassNotFoundException e) {
+            Debug.printException(e);
+            return false;
+        }
     }
 
     public String getDriver() {
