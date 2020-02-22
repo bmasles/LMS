@@ -2,3 +2,4 @@
 [submodule "src/main/java/com/smoothstack/lms/borrowermicroservice/common"]
 	path = src/main/java/com/smoothstack/lms/borrowermicroservice/common
 	url = git@github.com:ss-bak/lms-common.git
+	branch = master
