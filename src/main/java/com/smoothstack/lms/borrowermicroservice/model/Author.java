@@ -1,10 +1,8 @@
 package com.smoothstack.lms.borrowermicroservice.model;
 
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Column;
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Entity;
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Id;
-import com.smoothstack.lms.borrowermicroservice.context.annotation.Table;
-import com.smoothstack.lms.borrowermicroservice.persistance.CrudRepository;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_author")
@@ -12,19 +10,25 @@ public class Author  {
 
     @Id
     @Column(name="authorId")
-    private Integer id;
+    @SequenceGenerator(name = "author", sequenceName = "authorId", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(generator = "author")
+    private long id;
 
     @Column(name="authorName")
     private String name;
 
+    @ManyToMany(mappedBy = "authorCollection")
+    @JoinColumn(name = "bookId", referencedColumnName = "bookId")
+    private Set<Book> bookCollection;
+
     public Author() {
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -34,5 +38,13 @@ public class Author  {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Book> getBookCollection() {
+        return bookCollection;
+    }
+
+    public void setBookCollection(Set<Book> bookCollection) {
+        this.bookCollection = bookCollection;
     }
 }
