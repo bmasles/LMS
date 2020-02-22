@@ -6,19 +6,20 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_author")
+@Access(AccessType.FIELD)
 public class Author  {
 
-    @Id
-    @Column(name="authorId")
-    @SequenceGenerator(name = "author", sequenceName = "authorId", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(generator = "author")
+        @Id
+        @Column(name="authorId")
+        @SequenceGenerator(name = "author", sequenceName = "authorId", initialValue = 1, allocationSize = 1)
+        @GeneratedValue(generator = "author")
     private long id;
 
-    @Column(name="authorName")
+        @Column(name="authorName")
     private String name;
 
-    @ManyToMany(mappedBy = "authorCollection")
-    @JoinColumn(name = "bookId", referencedColumnName = "bookId")
+        @ManyToMany(mappedBy = "authorCollection")
+        @JoinColumn(name = "bookId", referencedColumnName = "bookId")
     private Set<Book> bookCollection;
 
     public Author() {
