@@ -22,5 +22,5 @@ public interface LoansCommonRepository extends JpaRepository<Loans, Long> {
 
     List<Loans> findAllByBorrowerAndBook(Borrower borrower, Book book);
 
-    Optional<Loans> findAllByBorrowerAndLibraryBranchAndBook(Borrower borrower, Branch branch, Book book);
+    Optional<Loans> findAllByBorrowerAndBranchAndBook(Borrower borrower, Branch branch, Book book);
 }
