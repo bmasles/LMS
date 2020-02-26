@@ -1,7 +1,7 @@
 package com.smoothstack.lms.borrowermicroservice.service;
 
-import com.smoothstack.lms.borrowermicroservice.common.model.LibraryBranch;
-import com.smoothstack.lms.borrowermicroservice.common.repository.LibraryBranchRepository;
+import com.smoothstack.lms.common.model.Branch;
+import com.smoothstack.lms.common.repository.LibraryBranchCommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,14 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class LibraryBranchService {
 
     @Autowired
-    LibraryBranchRepository libraryBranchRepository;
+    LibraryBranchCommonRepository libraryBranchRepository;
 
     @Transactional
-    public LibraryBranch buildAndSave(LibraryBranch libraryBranch) {
+    public Branch buildAndSave(Branch branch) {
 
-        libraryBranchRepository.save(libraryBranch);
+        libraryBranchRepository.save(branch);
         libraryBranchRepository.flush();
-        return libraryBranch;
+        return branch;
     }
 
 }

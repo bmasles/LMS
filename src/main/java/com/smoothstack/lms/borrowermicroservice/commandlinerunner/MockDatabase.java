@@ -2,11 +2,11 @@ package com.smoothstack.lms.borrowermicroservice.commandlinerunner;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.smoothstack.lms.borrowermicroservice.Debug;
-import com.smoothstack.lms.borrowermicroservice.common.model.*;
-import com.smoothstack.lms.borrowermicroservice.common.repository.BookRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.BorrowerRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.CopiesRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.LibraryBranchRepository;
+import com.smoothstack.lms.common.model.*;
+import com.smoothstack.lms.common.repository.BookCommonRepository;
+import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
+import com.smoothstack.lms.common.repository.CopiesCommonRepository;
+import com.smoothstack.lms.common.repository.LibraryBranchCommonRepository;
 import com.smoothstack.lms.borrowermicroservice.service.BookServices;
 import com.smoothstack.lms.borrowermicroservice.service.BorrowerService;
 import com.smoothstack.lms.borrowermicroservice.service.LibraryBranchService;
@@ -22,16 +22,16 @@ import java.util.*;
 public class MockDatabase implements CommandLineRunner {
 
     @Autowired
-    BookRepository bookRepository;
+    BookCommonRepository bookRepository;
 
     @Autowired
-    BorrowerRepository borrowerRepository;
+    BorrowerCommonRepository borrowerRepository;
 
     @Autowired
-    LibraryBranchRepository libraryBranchRepository;
+    LibraryBranchCommonRepository libraryBranchRepository;
 
     @Autowired
-    CopiesRepository copiesRepository;
+    CopiesCommonRepository copiesRepository;
 
     @Autowired
     BookServices bookServices;
@@ -67,7 +67,7 @@ public class MockDatabase implements CommandLineRunner {
             Optional<Book> book = bookRepository.findById(bookId);
 
             for (long branchId = 0; branchId < libraryCount; branchId++) {
-                Optional<LibraryBranch> libraryBranch = libraryBranchRepository.findById(branchId);
+                Optional<Branch> libraryBranch = libraryBranchRepository.findById(branchId);
 
                 if (book.isPresent()&&libraryBranch.isPresent()) {
 
@@ -137,7 +137,7 @@ public class MockDatabase implements CommandLineRunner {
 
         town.stream()
                 .filter(t ->!libraryBranchRepository.existsByBranchNameIgnoreCase(t))
-                .map(t->new LibraryBranch(t,"12 "+t+" Road, "+t+" City, VA 20200"))
+                .map(t->new Branch(t,"12 "+t+" Road, "+t+" City, VA 20200"))
                 .forEach(libraryBranchService::buildAndSave);
 
     }

@@ -1,14 +1,14 @@
 package com.smoothstack.lms.borrowermicroservice.service;
 
 import com.smoothstack.lms.borrowermicroservice.Debug;
-import com.smoothstack.lms.borrowermicroservice.common.model.Author;
-import com.smoothstack.lms.borrowermicroservice.common.model.Book;
-import com.smoothstack.lms.borrowermicroservice.common.model.Genre;
-import com.smoothstack.lms.borrowermicroservice.common.model.Publisher;
-import com.smoothstack.lms.borrowermicroservice.common.repository.AuthorRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.BookRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.GenreRepository;
-import com.smoothstack.lms.borrowermicroservice.common.repository.PublisherRepository;
+import com.smoothstack.lms.common.model.Author;
+import com.smoothstack.lms.common.model.Book;
+import com.smoothstack.lms.common.model.Genre;
+import com.smoothstack.lms.common.model.Publisher;
+import com.smoothstack.lms.common.repository.AuthorCommonRepository;
+import com.smoothstack.lms.common.repository.BookCommonRepository;
+import com.smoothstack.lms.common.repository.GenreCommonRepository;
+import com.smoothstack.lms.common.repository.PublisherCommonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,16 +19,16 @@ import java.util.Optional;
 public class BookServices {
 
     @Autowired
-    BookRepository bookRepository;
+    BookCommonRepository bookRepository;
 
     @Autowired
-    PublisherRepository publisherRepository;
+    PublisherCommonRepository publisherRepository;
 
     @Autowired
-    AuthorRepository authorRepository;
+    AuthorCommonRepository authorRepository;
 
     @Autowired
-    GenreRepository genreRepository;
+    GenreCommonRepository genreRepository;
 
     @Transactional
     public Book buildAndSave(Book book, Publisher publisher, Author author, Genre genre) {
@@ -52,14 +52,14 @@ public class BookServices {
         Debug.println(author.toString());
 
         book.setPublisher(publisher);
-        book.getBookAuthorCollection().add(author);
+        book.getBookAuthorSet().add(author);
 
         bookRepository.save(book);
 
-        publisher.getPublisherBookCollection().add(book);
+        publisher.getPublisherBookSet().add(book);
         publisherRepository.save(publisher);
 
-        author.getAuthorBookCollection().add(book);
+        author.getAuthorBookSet().add(book);
         authorRepository.save(author);
 
         Debug.println(book.toString());
@@ -71,7 +71,7 @@ public class BookServices {
             genre = genreChecked.get();
         }
 
-        genre.getGenreBookCollection().add(book);
+        genre.getGenreBookSet().add(book);
 
         genreRepository.save(genre);
 
