@@ -37,14 +37,6 @@ public interface CommonService<T, ID> {
         return (object);
     };
 
-    default boolean beforeDeleteById(ID id) { return true;}
-    default void afterDeleteById(ID id) {}
-
-    default void deleteById(ID id)  {
-        if (!beforeDeleteById(id)) return;
-        getJpaRepository().deleteById(id);
-        afterDeleteById(id);
-    };
 
     default boolean beforeDelete(T object) { return true; }
     default void afterDelete(T object) {}

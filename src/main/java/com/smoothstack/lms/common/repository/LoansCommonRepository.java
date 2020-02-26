@@ -11,7 +11,14 @@ import java.util.Optional;
 
 public interface LoansCommonRepository extends JpaRepository<Loans, Long> {
 
+
     List<Loans> findAllByBorrower(Borrower borrower);
+
+    boolean existsByBook(Book book);
+
+    boolean existsByBorrower(Borrower borrower);
+
+    boolean existsByBranch(Branch branch);
 
     List<Loans> findAllByBorrowerAndBook(Borrower borrower, Book book);
 

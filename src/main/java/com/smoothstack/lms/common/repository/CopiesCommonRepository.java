@@ -10,7 +10,12 @@ import java.util.Optional;
 
 public interface CopiesCommonRepository extends JpaRepository<Copies, Long> {
 
-    List<Copies> findAllByLibraryBranchAndNoOfCopiesGreaterThanEqual(Branch branch, int minimumNoOfCopies);
+    boolean existsByBook(Book book);
+    boolean existsByBranch(Branch branch);
 
-    Optional<Copies> findAllByBookAndLibraryBranchAndNoOfCopiesGreaterThanEqual(Book book, Branch branch, int minimumNoOfCopies);
+    void deleteAllByBook(Book book);
+
+    List<Copies> findAllByBranchAndCopiesAmountGreaterThanEqual(Branch branch, int minimumNoOfCopies);
+
+    Optional<Copies> findAllByBookAndBranchAndCopiesAmountGreaterThanEqual(Book book, Branch branch, int minimumNoOfCopies);
 }

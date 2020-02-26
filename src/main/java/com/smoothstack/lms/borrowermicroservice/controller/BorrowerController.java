@@ -4,7 +4,7 @@ package com.smoothstack.lms.borrowermicroservice.controller;
 import com.smoothstack.lms.common.model.*;
 import com.smoothstack.lms.common.repository.BookCommonRepository;
 import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
-import com.smoothstack.lms.common.repository.LibraryBranchCommonRepository;
+import com.smoothstack.lms.common.repository.BranchCommonRepository;
 import com.smoothstack.lms.common.repository.LoansCommonRepository;
 import com.smoothstack.lms.common.util.LoopTerminator;
 import com.smoothstack.lms.common.util.Response;
@@ -36,7 +36,7 @@ public class BorrowerController {
     private LoansCommonRepository loansRepository;
 
     @Autowired
-    private LibraryBranchCommonRepository libraryBranchRepository;
+    private BranchCommonRepository libraryBranchRepository;
 
     @Autowired
     private LoopTerminator loopTerminator;

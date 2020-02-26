@@ -6,10 +6,10 @@ import com.smoothstack.lms.common.model.*;
 import com.smoothstack.lms.common.repository.BookCommonRepository;
 import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
 import com.smoothstack.lms.common.repository.CopiesCommonRepository;
-import com.smoothstack.lms.common.repository.LibraryBranchCommonRepository;
+import com.smoothstack.lms.common.repository.BranchCommonRepository;
 import com.smoothstack.lms.borrowermicroservice.service.BookServices;
 import com.smoothstack.lms.borrowermicroservice.service.BorrowerService;
-import com.smoothstack.lms.borrowermicroservice.service.LibraryBranchService;
+import com.smoothstack.lms.borrowermicroservice.service.BranchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class MockDatabase implements CommandLineRunner {
     BorrowerCommonRepository borrowerRepository;
 
     @Autowired
-    LibraryBranchCommonRepository libraryBranchRepository;
+    BranchCommonRepository libraryBranchRepository;
 
     @Autowired
     CopiesCommonRepository copiesRepository;
@@ -40,7 +40,7 @@ public class MockDatabase implements CommandLineRunner {
     BorrowerService borrowerService;
 
     @Autowired
-    LibraryBranchService libraryBranchService;
+    BranchService branchService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -138,7 +138,7 @@ public class MockDatabase implements CommandLineRunner {
         town.stream()
                 .filter(t ->!libraryBranchRepository.existsByBranchNameIgnoreCase(t))
                 .map(t->new Branch(t,"12 "+t+" Road, "+t+" City, VA 20200"))
-                .forEach(libraryBranchService::buildAndSave);
+                .forEach(branchService::buildAndSave);
 
     }
 

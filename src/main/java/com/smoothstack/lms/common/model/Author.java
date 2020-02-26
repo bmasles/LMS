@@ -26,7 +26,7 @@ public class Author implements Serializable {
         @NotBlank
     private String authorName;
 
-        @ManyToMany(mappedBy = "authorSet")
+        @ManyToMany(mappedBy = "bookAuthorSet")
     private Set<Book> authorBookSet = new HashSet<>();
 
     public Author() {

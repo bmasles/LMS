@@ -1,7 +1,10 @@
 package com.smoothstack.lms.common.service;
 
+import com.smoothstack.lms.common.exception.DependencyException;
 import com.smoothstack.lms.common.model.Borrower;
 import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
+import com.smoothstack.lms.common.repository.LoansCommonRepository;
+import com.smoothstack.lms.common.repository.RepositoryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,5 +36,15 @@ public class BorrowerCommonService implements CommonService<Borrower, Long> {
     @Override
     public JpaRepository<Borrower, Long> getJpaRepository() {
         return authorCommonRepository;
+    }
+
+    @Override
+    public boolean beforeDelete(Borrower borrower) {
+        if (((LoansCommonRepository) RepositoryAdapter.getLoansRepository()).existsByBorrower(borrower)) {
+            throw new DependencyException("Cannot delete borrower, must return all book before deletion.");
+        }
+        else {
+            return true;
+        }
     }
 }
