@@ -1,4 +1,4 @@
-package com.smoothstack.lms.borrowermicroservice;
+package com.smoothstack.lms.common.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

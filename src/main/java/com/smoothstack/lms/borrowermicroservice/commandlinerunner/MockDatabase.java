@@ -1,15 +1,12 @@
 package com.smoothstack.lms.borrowermicroservice.commandlinerunner;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.smoothstack.lms.borrowermicroservice.Debug;
-import com.smoothstack.lms.common.model.*;
-import com.smoothstack.lms.common.repository.BookCommonRepository;
-import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
-import com.smoothstack.lms.common.repository.CopiesCommonRepository;
-import com.smoothstack.lms.common.repository.BranchCommonRepository;
+import com.smoothstack.lms.common.util.Debug;
 import com.smoothstack.lms.borrowermicroservice.service.BookServices;
 import com.smoothstack.lms.borrowermicroservice.service.BorrowerService;
 import com.smoothstack.lms.borrowermicroservice.service.BranchService;
+import com.smoothstack.lms.common.model.*;
+import com.smoothstack.lms.common.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -19,19 +16,17 @@ import java.io.IOException;
 import java.util.*;
 
 @Configuration
+
 public class MockDatabase implements CommandLineRunner {
 
-    @Autowired
-    BookCommonRepository bookRepository;
+    BookCommonRepository bookRepository = RepositoryAdapter.getBookRepository();
 
-    @Autowired
-    BorrowerCommonRepository borrowerRepository;
 
-    @Autowired
-    BranchCommonRepository libraryBranchRepository;
+    BorrowerCommonRepository borrowerRepository = RepositoryAdapter.getBorrowerRepository();
 
-    @Autowired
-    CopiesCommonRepository copiesRepository;
+    BranchCommonRepository libraryBranchRepository = RepositoryAdapter.getBranchRepository();
+
+    CopiesCommonRepository copiesRepository = RepositoryAdapter.getCopiesRepository();
 
     @Autowired
     BookServices bookServices;

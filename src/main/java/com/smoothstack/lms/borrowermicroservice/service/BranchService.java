@@ -11,7 +11,7 @@ public class BranchService extends BranchCommonService {
     @Transactional
     public Branch buildAndSave(Branch branch) {
 
-        save(branch);
+        super.save(branch);
 
         return branch;
     }

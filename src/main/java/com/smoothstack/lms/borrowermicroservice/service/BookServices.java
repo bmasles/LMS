@@ -1,6 +1,6 @@
 package com.smoothstack.lms.borrowermicroservice.service;
 
-import com.smoothstack.lms.borrowermicroservice.Debug;
+import com.smoothstack.lms.common.util.Debug;
 import com.smoothstack.lms.common.model.Author;
 import com.smoothstack.lms.common.model.Book;
 import com.smoothstack.lms.common.model.Genre;
@@ -33,13 +33,13 @@ public class BookServices {
     @Transactional
     public Book buildAndSave(Book book, Publisher publisher, Author author, Genre genre) {
         Debug.println("=== BEGIN ===");
+
         Optional<Publisher> publisherChecked = publisherRepository.findFirstByPublisherNameIgnoreCase(publisher.getPublisherName());
         if (!publisherChecked.isPresent()) {
             publisherRepository.save(publisher);
         } else {
             publisher = publisherChecked.get();
         }
-
 
         Optional<Author> authorChecked = authorRepository.findFirstByAuthorNameIgnoreCase(author.getAuthorName());
         if (!authorChecked.isPresent()) {

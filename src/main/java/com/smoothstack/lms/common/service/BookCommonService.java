@@ -3,24 +3,29 @@ package com.smoothstack.lms.common.service;
 import com.smoothstack.lms.common.exception.DependencyException;
 import com.smoothstack.lms.common.model.Book;
 import com.smoothstack.lms.common.repository.BookCommonRepository;
-import com.smoothstack.lms.common.repository.CopiesCommonRepository;
-import com.smoothstack.lms.common.repository.LoansCommonRepository;
 import com.smoothstack.lms.common.repository.RepositoryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.Validator;
 
-public class BookCommonService implements CommonService<Book, Long> {
+@Service
+public abstract class BookCommonService implements CommonService<Book, Long> {
 
-    private BookCommonRepository authorCommonRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    private BookCommonRepository bookCommonRepository;
 
     private Validator validator;
 
     @Autowired
     public final void setBookCommonRepository(BookCommonRepository authorCommonRepository) {
-        this.authorCommonRepository = authorCommonRepository;
+        this.bookCommonRepository = authorCommonRepository;
     }
 
     @Autowired
@@ -35,7 +40,36 @@ public class BookCommonService implements CommonService<Book, Long> {
 
     @Override
     public JpaRepository<Book, Long> getJpaRepository() {
-        return authorCommonRepository;
+        return bookCommonRepository;
+    }
+
+    @Override
+    public boolean beforeSave(Book book) {
+        book.getBookAuthorSet().forEach(author -> {
+            if (author != null
+                    && author.getAuthorId() != 0
+                    && !entityManager.contains(author)) {
+
+                RepositoryAdapter.getAuthorRepository().save(author);
+            }
+        });
+
+        // DETACHED and not TRANSIENT ?
+        if (book.getPublisher() != null
+                    && book.getPublisher().getPublisherId() != 0
+                    && !entityManager.contains(book.getPublisher())) {
+
+                RepositoryAdapter.getPublisherRepository().save(book.getPublisher());
+        }
+
+        book.getBookGenreSet().forEach(genre -> {
+            if (genre != null && genre.getGenreId() != 0 && !entityManager.contains(genre)) {
+
+                RepositoryAdapter.getGenreRepository().save(genre);
+            }
+        });
+
+        return true;
     }
 
     @Override
@@ -58,11 +92,11 @@ public class BookCommonService implements CommonService<Book, Long> {
     @Override
     public boolean beforeDelete(Book book) {
 
-        if (((LoansCommonRepository) RepositoryAdapter.getLoansRepository()).existsByBook(book)) {
+        if (RepositoryAdapter.getLoansRepository().existsByBook(book)) {
             throw new DependencyException("Cannot delete book, must return all book before deletion.");
         }
 
-        ((CopiesCommonRepository) RepositoryAdapter.getCopiesRepository()).deleteAllByBook(book);
+        RepositoryAdapter.getCopiesRepository().deleteAllByBook(book);
 
         book.getBookAuthorSet().forEach(author -> {
             author.getAuthorBookSet().remove(book);
@@ -84,4 +118,5 @@ public class BookCommonService implements CommonService<Book, Long> {
 
         return true;
     }
+
 }

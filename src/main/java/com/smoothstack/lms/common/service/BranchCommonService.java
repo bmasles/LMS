@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.validation.Validator;
 
-public class BranchCommonService implements CommonService<Branch, Long> {
+public abstract class BranchCommonService implements CommonService<Branch, Long> {
 
 
     private BranchCommonRepository authorCommonRepository;

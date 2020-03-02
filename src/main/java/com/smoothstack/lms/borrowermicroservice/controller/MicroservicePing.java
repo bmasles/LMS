@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,12 +26,13 @@ public class MicroservicePing {
     Environment environment;
 
     @RequestMapping(method = RequestMethod.GET, path = {"/ping", "/port"})
-    ResponseEntity<Map<String, Object>> ping() {
+    ResponseEntity<Map<String, Object>> ping(Principal principal) {
 
         Map<String, Object> model = new LinkedHashMap<>();
         model.put("localDateTime", LocalDateTime.now());
         model.put("webServerPort", server.getWebServer().getPort());
         model.put("localServerPort", environment.getProperty("local.server.port"));
+        model.put("principalName", principal != null?principal.getName():"<not logged-in>");
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 

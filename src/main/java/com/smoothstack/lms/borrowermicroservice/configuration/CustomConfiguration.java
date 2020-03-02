@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = "com.smoothstack.lms")
+@ComponentScan({"com.smoothstack.lms","com.smoothstack.lms.common"})
 @EnableTransactionManagement
 public class CustomConfiguration {
 

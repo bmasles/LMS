@@ -2,10 +2,7 @@ package com.smoothstack.lms.borrowermicroservice.controller;
 
 
 import com.smoothstack.lms.common.model.*;
-import com.smoothstack.lms.common.repository.BookCommonRepository;
-import com.smoothstack.lms.common.repository.BorrowerCommonRepository;
-import com.smoothstack.lms.common.repository.BranchCommonRepository;
-import com.smoothstack.lms.common.repository.LoansCommonRepository;
+import com.smoothstack.lms.common.repository.*;
 import com.smoothstack.lms.common.util.LoopTerminator;
 import com.smoothstack.lms.common.util.Response;
 import com.smoothstack.lms.borrowermicroservice.service.BorrowerService;
@@ -141,7 +138,7 @@ public class BorrowerController {
         Optional<Book> book = bookRepository.findById(bookId);
 
         if (borrower.isPresent() && libraryBranch.isPresent() && book.isPresent()) {
-            Optional<Loans> loans = loansRepository.findAllByBorrowerAndLibraryBranchAndBook(
+            Optional<Loans> loans = RepositoryAdapter.getLoansRepository().findAllBy(
                     borrower.get(), libraryBranch.get(),book.get() );
 
             if (loans.isPresent()) {

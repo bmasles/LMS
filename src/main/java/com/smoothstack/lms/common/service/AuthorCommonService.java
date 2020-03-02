@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.Validator;
 
 @Service
-public class AuthorCommonService implements CommonService<Author,Long>{
+public abstract class AuthorCommonService implements CommonService<Author,Long>{
 
     private AuthorCommonRepository authorCommonRepository;
 

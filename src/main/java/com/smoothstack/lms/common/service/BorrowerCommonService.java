@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.validation.Validator;
 
-public class BorrowerCommonService implements CommonService<Borrower, Long> {
+public abstract class BorrowerCommonService implements CommonService<Borrower, Long> {
 
 
     private BorrowerCommonRepository authorCommonRepository;

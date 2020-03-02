@@ -19,21 +19,21 @@ public interface CommonService<T, ID> {
         return getJpaRepository().findAll();
     };
 
-    default Optional<T> findById(ID id)  {
-        return getJpaRepository().findById(id);
+    default Optional<T> findById(ID... ids)  {
+        return getJpaRepository().findById(ids[0]);
     };
 
-    default T findByIdOrThrow(ID id){
-        return findById(id).orElseThrow(RecordNotFoundException::new);
+    default T findByIdOrThrow(ID... ids){
+        return findById(ids).orElseThrow(RecordNotFoundException::new);
     };
 
     default boolean beforeSave(T object) {return true;};
     default void afterSave(T object) {};
 
     default T save(T object)  {
-        if (!beforeSave(object)) return object;
+        if (!this.beforeSave(object)) return object;
         getJpaRepository().save(object);
-        afterSave(object);
+        this.afterSave(object);
         return (object);
     };
 
@@ -42,9 +42,9 @@ public interface CommonService<T, ID> {
     default void afterDelete(T object) {}
 
     default void delete(T object) {
-        if (!beforeDelete(object)) return;
+        if (!this.beforeDelete(object)) return;
         getJpaRepository().delete(object);
-        afterDelete(object);
+        this.afterDelete(object);
     }
 
     default Set<ConstraintViolation<T>> validate(T object) {
