@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List book</title>
+    <style>
+        .each-page-list {
+            padding-left: 3px;
+            padding-right: 3px;
+            border: black solid 1px;
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            font-size: 1.2rem;
+            font-weight: bolder;
+            color: white;
+            background: black;
+        }
+        .each-page-list:hover {
+            background: navy;
+        }
+        #raw  {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <code>
+        <pre>
+            <div id="view">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Publisher</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Copies</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listView">
+
+                    </tbody>
+                </table>
+                <table><tr id="paging"></tr></table>
+            </div>
+            <div id="raw">
+            </div>
+        </pre>
+    </code>
+</body>
+<script>
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            let responseObject = JSON.parse(xhttp.responseText);
+            let listView = document.getElementById("listView");
+            listView.copiesList = responseObject.response.copiesList
+            processCopiesList();
+
+        }
+    };
+    xhttp.open("GET", "http://localhost:8083/p/libraries/2/books:list", true);
+    xhttp.send();
+
+    let pageSize = 6;
+
+    function processCopiesList(start=0, size=pageSize) {
+        let listView = document.getElementById("listView");
+        let paging = document.getElementById("paging");
+        const copiesList = listView.copiesList;
+
+        document.getElementById("raw").innerHTML =
+            JSON.stringify(copiesList, null, 2);
+
+
+        while (listView.firstChild) {
+            listView.removeChild(listView.lastChild);
+        }
+
+        copiesList.limit(start, size).forEach(data=>listView.appendChild(getListNode(data)));
+
+        while (paging.firstChild) {
+            paging.removeChild(paging.lastChild);
+        }
+
+        getPaging().forEach(node=>paging.appendChild(node));
+    }
+
+    function getPaging(size=pageSize) {
+        let listView = document.getElementById("listView");
+        const copiesList = listView.copiesList;
+        let pageCount = Math.ceil(copiesList.length/pageSize);
+        console.log("count, pageCount", copiesList.length, pageCount);
+        let pageNav = [];
+        for (let i = 1; i <= pageCount;i++) {
+            let page = document.createElement("td");
+            page.classList.add("page-link");
+            let link = document.createElement("a");
+            link.classList.add("each-page-list");
+            link.innerHTML = i.toString();
+            link.pageNo = i;
+            link.pageSize = size;
+
+
+            link.onclick = function(ev) {
+                processCopiesList((this.pageNo-1)*this.pageSize);
+            };
+
+
+            page.appendChild(link);
+            pageNav.push(page);
+        }
+        return pageNav;
+    }
+
+    function getListNode(data) {
+        let book = data.book;
+        console.log("data", data);
+        let bookNode = document.createElement("tr");
+
+        let id = document.createElement("td");
+            id.innerHTML = book.bookId;
+        let title = document.createElement("td");
+            title.innerHTML = book.bookTitle;
+        let publisher = document.createElement("td");
+            publisher.innerHTML = book.publisher.publisherName;
+        let author = getAuthorNode(book.bookAuthorSet);
+        let genre = getGenreNode(book.bookGenreSet);
+        let copies = document.createElement("td");
+            copies.innerHTML = data.copiesAmount;
+
+        bookNode.appendChild(id);
+        bookNode.appendChild(title);
+        bookNode.appendChild(publisher);
+        bookNode.appendChild(author);
+        bookNode.appendChild(genre);
+        bookNode.appendChild(copies);
+
+        return bookNode;
+    }
+
+    function getAuthorNode(authorSet) {
+        console.log("authorSet", authorSet);
+        let authorNode = document.createElement("td");
+        for (const author of authorSet) {
+            console.log("author", author);
+            let eachAuthor = document.createElement("span");
+            eachAuthor.innerText = author.authorName;
+            if (authorNode.childElementCount > 0) {
+                let separator = document.createElement("span");
+                separator.innerText = ", ";
+                authorNode.appendChild(separator);
+            }
+            authorNode.appendChild(eachAuthor);
+        }
+        return authorNode;
+    }
+
+    function getGenreNode(genreSet) {
+        let genreNode = document.createElement("td");
+        for (const genre of genreSet) {
+            let eachGenre = document.createElement("span");
+            eachGenre.innerText = genre.genreName;
+            if (genreNode.childElementCount > 0){
+                let separator = document.createElement("span");
+                separator.innerText = ", ";
+                genreNode.appendChild(separator);
+            }
+            genreNode.appendChild(eachGenre);
+        }
+        return genreNode;
+    }
+
+    Array.prototype.limit =  limit;
+
+    function limit(from,count){
+        return this.filter((x,i)=>{
+            if(i>=(from) && i<(from+count)){return true}
+        })
+
+    }
+
+</script>
+</body>
+</html>
